@@ -1,0 +1,19 @@
+[provider]
+kind = "openai_compatible"
+model = "gpt-4.1-mini"
+api_key_env = "OPENAI_API_KEY"
+base_url = "https://api.openai.com/v1"
+
+# Example LM Studio local server:
+# kind = "lm_studio"
+# model = "replace-with-your-loaded-lm-studio-model"
+# base_url = "http://127.0.0.1:1234/v1"
+
+[knowledge]
+root = "knowledge"
+schema_file = "schema/AGENTS.md"
+
+[runtime]
+max_context_files = 6
+max_source_chars = 24000
+max_page_chars = 8000

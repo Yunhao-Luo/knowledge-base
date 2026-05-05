@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>LLM Wiki</title>
+    <link rel="stylesheet" href="/app.css">
+  </head>
+  <body>
+    <div class="app-frame">
+      <div class="app-shell">
+        <aside class="sidebar">
+          <div class="brand">
+            <p class="eyebrow">Knowledge Console</p>
+            <h1>LLM Wiki</h1>
+            <p class="subtitle">Files, actions, and reading in one focused workspace.</p>
+          </div>
+
+          <section class="panel nav-panel">
+            <div class="tool-launchers compact-tools">
+              <button class="tool-launcher compact-tool" id="open-query-tool">Query</button>
+              <button class="tool-launcher compact-tool" id="open-ingest-tool">Ingest</button>
+              <button class="tool-launcher compact-tool" id="open-lint-tool">Lint</button>
+            </div>
+            <div class="quick-actions">
+              <button class="ghost-button" id="refresh-data">Refresh</button>
+              <button class="primary-button" id="ingest-all-top">Ingest Pending</button>
+            </div>
+          </section>
+
+          <section class="panel shortcuts-panel">
+            <div class="panel-head compact-head">
+              <h2>Core Files</h2>
+            </div>
+            <div class="pinned-links">
+              <button class="pinned-link" id="open-overview-link">Overview</button>
+              <button class="pinned-link" id="open-index-link">Index</button>
+              <button class="pinned-link" id="open-log-link">Log</button>
+            </div>
+          </section>
+
+          <section class="panel library-panel">
+            <div class="panel-head compact-head">
+              <h2>Library</h2>
+              <input id="file-filter" class="search" type="search" placeholder="Filter pages or sources">
+            </div>
+            <div class="file-groups">
+              <div class="file-group">
+                <button class="file-group-label section-toggle" id="toggle-wiki-section">
+                  <span class="explorer-caret">▾</span>
+                  <span>Wiki</span>
+                </button>
+                <div id="wiki-files" class="file-list"></div>
+              </div>
+              <div class="file-group">
+                <button class="file-group-label section-toggle" id="toggle-raw-section">
+                  <span class="explorer-caret">▾</span>
+                  <span>Raw Sources</span>
+                </button>
+                <div id="raw-files" class="file-list"></div>
+              </div>
+            </div>
+          </section>
+        </aside>
+
+        <div class="panel-resizer" id="panel-resizer" role="separator" aria-orientation="vertical" aria-label="Resize sidebar"></div>
+
+        <main class="workspace">
+          <section class="workspace-bar">
+            <div class="workspace-bar-copy">
+              <p class="eyebrow">Reader</p>
+              <h2 id="viewer-title">Select a page</h2>
+            </div>
+            <span id="viewer-meta" class="meta-pill"></span>
+          </section>
+
+          <div id="tab-strip" class="tab-strip"></div>
+
+          <article class="viewer-card">
+            <div id="rendered-view" class="rendered-view empty-state">
+              Choose a wiki page or raw source from the library to preview it here.
+            </div>
+          </article>
+        </main>
+      </div>
+
+      <footer class="status-bar" id="status-cards"></footer>
+    </div>
+
+    <script src="/app.js"></script>
+  </body>
+</html>
