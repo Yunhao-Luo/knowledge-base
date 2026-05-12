@@ -1,8 +1,21 @@
 # LLM Wiki
 
-Terminal-first knowledge base assistant for maintaining a persistent markdown wiki from raw source material.
+LLM Wiki is a terminal-first knowledge base assistant for turning raw source documents into a persistent markdown wiki. It keeps the workflow intentionally simple: raw material stays immutable, wiki pages are generated and maintained separately, and the index and log preserve navigation and history.
 
-## Quick start
+## How It Works
+
+1. Put source material in `knowledge/raw/`.
+2. Ingest sources into `knowledge/wiki/`.
+3. Use the wiki pages for synthesis, queries, and follow-up editing.
+4. Keep `knowledge/wiki/index.md` and `knowledge/wiki/log.md` up to date.
+
+The wiki is designed around three layers:
+
+- `knowledge/raw/` for immutable source documents
+- `knowledge/wiki/` for generated summaries, concepts, and analyses
+- `knowledge/schema/AGENTS.md` for the maintenance rules used by the assistant
+
+## Quick Start
 
 1. Copy the example config:
 
@@ -10,19 +23,21 @@ Terminal-first knowledge base assistant for maintaining a persistent markdown wi
 cp config/llm_wiki.example.toml config/llm_wiki.toml
 ```
 
-2. Set your provider credentials:
+2. Set provider credentials for your configured backend. For OpenAI-style providers, that is usually:
 
 ```bash
 export OPENAI_API_KEY=...
 ```
 
-3. Launch the assistant:
+3. Start the assistant:
 
 ```bash
 ./wiki
 ```
 
-You can also run a single command:
+If you prefer a single command instead of the REPL, use one of the subcommands below.
+
+## Commands
 
 ```bash
 ./wiki ingest path/to/source.md
@@ -32,41 +47,29 @@ You can also run a single command:
 ./wiki lint --apply
 ./wiki links check
 ./wiki links fix
+./wiki status
 ./wiki gui
 ```
 
-## Structure
+## GUI
 
-- `src/` contains the assistant code.
-- `knowledge/raw/` stores immutable source files.
-- `knowledge/wiki/` stores generated markdown pages.
-- `knowledge/schema/AGENTS.md` defines the wiki maintenance rules for the assistant.
-
-## Graphical interface
-
-Launch the local GUI with:
-
-```bash
-./wiki gui
-```
-
-It serves a lightweight web app on `http://127.0.0.1:8765` by default. The interface can:
+`./wiki gui` starts a lightweight local web app on `http://127.0.0.1:8765` by default. The interface lets you:
 
 - browse raw sources and wiki pages
 - render markdown for reading
-- run query, ingest, ingest-all, lint, and lint-apply actions
-- show pending raw sources and current knowledge-base status
+- run ingest, query, lint, and link checks
+- inspect the current knowledge-base status
 
-## Supported providers
+## Configuration
 
-- `openai_compatible`: OpenAI-style chat completions APIs, including many hosted and local servers.
-- `lm_studio`: LM Studio's local OpenAI-style server. No API key is required by default.
-- `anthropic`: Anthropic Messages API.
-- `command`: run any custom adapter command that accepts JSON on stdin and returns JSON on stdout.
+The CLI reads `config/llm_wiki.toml` by default. Copy the example file and configure one of the supported providers:
 
-## LM Studio
+- `openai_compatible`: OpenAI-style chat completions APIs, including many hosted and local servers
+- `lm_studio`: LM Studio's local OpenAI-style server
+- `anthropic`: Anthropic Messages API
+- `command`: a custom adapter command that reads JSON from stdin and writes JSON from stdout
 
-Use this config if you're pointing at LM Studio's local server:
+Example LM Studio configuration:
 
 ```toml
 [provider]
@@ -75,13 +78,23 @@ model = "replace-with-your-loaded-lm-studio-model"
 base_url = "http://127.0.0.1:1234/v1"
 ```
 
-Use the exact model identifier shown by LM Studio for the currently loaded model. If LM Studio returns an error payload, the CLI now surfaces that message directly instead of failing with a raw `'choices'` exception.
+Use the exact model identifier shown by LM Studio for the loaded model. The CLI surfaces provider errors directly so configuration problems are easier to diagnose.
 
-The app is text-first out of the box. Non-text raw sources are preserved in `knowledge/raw/`, but only plain-text-readable files are ingested into prompts in this first version.
+## Repository Layout
 
-## Workflow additions
+- `src/llm_wiki/` contains the assistant, CLI, GUI, providers, and helpers
+- `knowledge/raw/` stores source files that should not be edited in place
+- `knowledge/wiki/` stores generated wiki pages, indexes, and logs
+- `knowledge/schema/AGENTS.md` defines the wiki maintenance rules
+- `tests/` contains the automated test suite
 
-- `./wiki ingest --all` ingests every pending raw markdown or text file under `knowledge/raw/` that does not already have a matching source summary under `knowledge/wiki/sources/`.
-- `./wiki lint --apply` asks the model to repair the wiki directly, writes any returned page updates, rebuilds the index, and logs the applied lint pass.
+## Documentation Notes
+
+The wiki should stay concise, factual, and cross-linked. Source summaries belong under `knowledge/wiki/sources/`, thematic synthesis belongs under folders such as `concepts/` or `analyses/`, and `knowledge/wiki/log.md` should remain append-only.
+
+## Workflow Notes
+
+- `./wiki ingest --all` processes pending raw markdown or text files that do not already have matching source summaries.
+- `./wiki lint --apply` asks the model to repair the wiki, writes any returned page updates, rebuilds the index, and logs the lint pass.
 - `./wiki links check` scans wiki markdown for missing or ambiguous internal links.
-- `./wiki links fix` rewrites resolvable internal links to canonical targets, then re-checks the wiki.
+- `./wiki links fix` rewrites resolvable internal links to canonical targets and then re-checks the wiki.

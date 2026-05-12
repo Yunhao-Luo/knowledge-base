@@ -1,43 +1,38 @@
 # Overview
 
-This wiki is maintained by the terminal assistant using the [[sources/llm-wiki-idea]] approach. Add sources to `knowledge/raw/` or use `ingest` to begin building out the knowledge base.
+This wiki is a small markdown knowledge base maintained by the terminal assistant. Add source files to `knowledge/raw/` and ingest them to grow the wiki over time.
 
-## Architecture
-The wiki follows a three-layer architecture:
-- **Raw sources**: Immutable documents such as articles, papers, notes, and media files stored in `knowledge/raw/`
-- **The wiki**: LLM-generated markdown pages that summarize, connect, and synthesize the raw sources in `knowledge/wiki/`
-- **The schema**: Instruction document (`AGENTS.md` or similar) that teaches the LLM how to maintain the wiki consistently
+## Current State
 
-## Operations
-### Ingest
-When a new source arrives, the system:
-1. Reads the source
-2. Extracts key claims, entities, and concepts
-3. Creates or updates relevant wiki pages
-4. Updates the wiki index (`index.md`)
-5. Appends a record to the chronological log (`log.md`)
+The repository currently has three wiki files:
 
-### Query
-Questions should be answered against the wiki rather than the raw corpus whenever possible. The LLM first reads the index, then relevant pages, then synthesizes an answer with citations. Durable answers can be saved back into the wiki as new pages.
+- `index.md` - navigation entry point
+- `overview.md` - project and workflow summary
+- `log.md` - append-only activity log
 
-### Lint
-The assistant periodically checks the wiki for:
-- Contradictions across pages
-- Stale claims
-- Orphan pages
-- Missing concept pages
-- Weak cross-linking
-- Research gaps
+## Structure
 
-## Indexing and Logging
-Two special files help navigation:
-- `index.md`: A content-oriented catalog of all wiki pages
-- `log.md`: An append-only chronological history of ingests, queries, and lint passes
+The project is organized into three layers:
 
-## Why this works
-The hard part of maintaining a knowledge base is the bookkeeping: updating links, preserving synthesis, and keeping many pages consistent. LLMs can do this repetitive maintenance cheaply, allowing humans to focus on curation, judgment, and higher-level thinking.
+- Raw sources: immutable documents in `knowledge/raw/`
+- Wiki pages: generated markdown summaries in `knowledge/wiki/`
+- Schema: maintenance instructions in `knowledge/schema/AGENTS.md`
 
-## See Also
-- [[sources/llm-wiki-idea]] - Original source document describing the pattern
-- [[concepts/artificial-intelligence]] - Core AI concepts being applied
-- [[analyses/xr-ai-intersection]] - Example of synthesized analysis from sources
+## Workflow
+
+1. Read or add a source in `knowledge/raw/`
+2. Ingest the source into the wiki
+3. Update `index.md` so the new page is easy to find
+4. Append a concise note to `log.md`
+
+## Maintenance Notes
+
+- Keep wiki pages short, factual, and cross-linked
+- Keep source summaries separate from thematic synthesis
+- Preserve uncertainty when sources disagree
+- Treat `log.md` as append-only
+
+## Related Files
+
+- [index.md](index.md) - current wiki index
+- [log.md](log.md) - operation history

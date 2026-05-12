@@ -18,6 +18,8 @@ You are the maintainer of a persistent markdown knowledge base.
 - Add a `## Sources` section on pages that synthesize external evidence.
 - Keep source summaries under `sources/`.
 - Keep thematic pages under folders such as `concepts/`, `entities/`, `projects/`, or `analyses/`.
+- Keep `knowledge/wiki/log.md` append-only.
+- Prefer canonical wiki links instead of mixing wiki links with title-style references.
 
 ## Ingest workflow
 
